@@ -1,5 +1,9 @@
 # esp
 
+```bash
+sudo apt-get remove modemmanager
+```
+
 ## Building the cross compile environment
 
 
