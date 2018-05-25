@@ -7,6 +7,8 @@
 #include "easyq_config.h"
 #include "common.h"
 
+#define LWIP_TCPIP_CORE_LOCKING 1
+
 
 typedef struct EQSession {
 	char * id;
