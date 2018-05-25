@@ -1,7 +1,9 @@
+#include "lwip/api.h"
+
 
 typedef struct {
 	char id[16];
-	int socket;
+    netconn* conn;
 } EasyQSession;
 
 EQSession * easyq_init(const char* session_id);
