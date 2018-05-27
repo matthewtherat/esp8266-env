@@ -13,11 +13,10 @@ err_t easyq_connect(EQSession * s) {
 	// Wait for wifi conection
     wait_for_wifi_connection();
 
-    printf("Running DNS lookup for %s...\n", EASYQ_HOST);
+    // Running DNS lookup for
     err = getaddrinfo(EASYQ_HOST, EASYQ_PORT, &hints, &remote_addr);
 
     if (err != 0 || remote_addr == NULL) {
-        printf("DNS lookup failed err=%d res=%p\n", err, remote_addr);
         if(remote_addr) {
             freeaddrinfo(remote_addr);
         }
@@ -26,20 +25,19 @@ err_t easyq_connect(EQSession * s) {
 
     s->socket = socket(remote_addr->ai_family, remote_addr->ai_socktype, 0);
     if(s->socket < 0) {
-        printf("... Failed to allocate socket.\n");
         freeaddrinfo(remote_addr);
         return s->socket;
     }
-    printf("... allocated socket\n");
+    // Allocated socket
 
     err = connect(s->socket, remote_addr->ai_addr, remote_addr->ai_addrlen);
     if(err != ERR_OK) {
         freeaddrinfo(remote_addr);
-        printf("... socket connect failed.\n");
         return err;
     }
     freeaddrinfo(remote_addr);
-    printf("... connected\n");
+
+    // Connected
 
 	int timeout=400;
 	err = lwip_setsockopt(s->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(int));
@@ -59,7 +57,6 @@ err_t easyq_login(EQSession * s) {
     if (err != ERR_OK) {
         return err;
     }
-    printf("... socket send success\n");
 
 	int session_id_len = lwip_recv(s->socket, s->id, 32, 0);
 	if (session_id_len < 0){
@@ -120,29 +117,29 @@ err_t easyq_read(EQSession * s, char * line, size_t * len) {
     return ERR_OK;
 }
 
-/*
 
-err_t easyq_write(EQSession * session, char * line, size_t len) {
-    err_t err;
-    err = netconn_write(session->conn, line, len, NETCONN_COPY); 
-	if (err != ERR_OK) {
+
+err_t easyq_write(EQSession * s, char * line, size_t len) {
+    err_t err = lwip_write(s->socket, line, len);
+    if (err != ERR_OK) {
         return err;
-	}
+    }
+
     return ERR_OK;
 }
 
 
-err_t easyq_push(EQSession * session, Queue * queue, char * msg, size_t len) {
+err_t easyq_push(EQSession * s, Queue * queue, char * msg, size_t len) {
     size_t size;
     if (len == -1){
         len = strlen(msg);
     }
     char line[16 + len + queue->len];
     size = sprintf(line, "PUSH %s INTO %s;\n", msg, queue->name);
-    return easyq_write(session, line, size);
+    return easyq_write(s, line, size);
 }
 
-
+/*
 err_t easyq_pull(EQSession * session, Queue * queue) {
     size_t size;
     char line[14 + queue->len];
