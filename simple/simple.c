@@ -23,36 +23,35 @@ void sender(void* args) {
     char buff[16];
     Queue * queue = Queue_new(STATUS_QUEUE);
     while (1) {
+        delay(1000);
         printf("Inititlizing easyq\n");
-        delay(100);
-        err = easyq_init(eq);
+        err = easyq_init(&eq);
         if (err != ERR_OK) {
             printf("Cannot Inititalize the easyq\n");
-            delay(1000);
             continue;
         }
         printf("Session ID: %s\n", eq->id);
         while (1) {
             sprintf(buff, "%08d", c);
-            //easyq_push(eq, queue, buff, -1);
-            delay(500);
+            easyq_push(eq, queue, buff, -1);
+            delay(5000);
             c++;
         }
     }
 }
 
 
-/*
 void listener(void* args) {
     err_t err;
-    char * buff;
+    char * buff = NULL;
     size_t buff_len;
     Queue * queue = Queue_new(COMMAND_QUEUE);
     while (1) {
-        delay(500);
-        if (!eq) {
+        delay(1000);
+        if (eq == NULL || !eq->ready) {
             continue;
         }
+        printf("EQ Ready: %d\n", eq->ready);
         err = easyq_pull(eq, queue);
         if (err != ERR_OK) {
             continue;
@@ -63,11 +62,11 @@ void listener(void* args) {
                 printf("Error reading from EasyQ");
                 continue;
             }
-            printf("-> %s", buff);
+            printf("<- %s", buff);
         }
     }
 }
-*/
+
 
 void user_init(void)
 {
@@ -85,6 +84,6 @@ void user_init(void)
     sdk_wifi_station_set_config(&config);
 
     xTaskCreate(sender, "sender", 512, NULL, 2, NULL);
-    //xTaskCreate(listener, "listener", 384, NULL, 2, NULL);
+    xTaskCreate(listener, "listener", 384, NULL, 2, NULL);
 }
 

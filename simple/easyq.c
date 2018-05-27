@@ -28,6 +28,7 @@ err_t easyq_connect(EQSession * s) {
         freeaddrinfo(remote_addr);
         return s->socket;
     }
+    
     // Allocated socket
 
     err = connect(s->socket, remote_addr->ai_addr, remote_addr->ai_addrlen);
@@ -39,11 +40,14 @@ err_t easyq_connect(EQSession * s) {
 
     // Connected
 
+    /*
 	int timeout=400;
 	err = lwip_setsockopt(s->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(int));
     if(err != ERR_OK) {
         return err;
     }
+    printf("socket option is set");
+    */
 
     // Everithing is OK
     return ERR_OK;
@@ -52,26 +56,26 @@ err_t easyq_connect(EQSession * s) {
 
 err_t easyq_login(EQSession * s) {
     err_t err;
-    char *login = "LOGIN "EASYQ_LOGIN";\n";
-    err = lwip_write(s->socket, login, strlen(login));
+    char * login = "LOGIN "EASYQ_LOGIN";\n";
+    err = easyq_write(s, login, strlen(login));
     if (err != ERR_OK) {
         return err;
     }
-
-	int session_id_len = lwip_recv(s->socket, s->id, 32, 0);
-	if (session_id_len < 0){
-        return session_id_len;
-	}
 
     size_t len;
-    err = easyq_read(s, s->id, &len);
+    char * retval;
+    err = easyq_read(s, &retval, &len);
     if (err != ERR_OK) {
         return err;
     }
+    s->id = malloc(len+1);
+    if (s->id == NULL) {
+        return ERR_MEM;
+    }
+    sprintf(s->id, "%s", retval);
 
     // Everithing is OK
     return ERR_OK;
-
 }
 
 
@@ -82,12 +86,18 @@ void easyq_close(EQSession * s) {
 }
 
 
-err_t easyq_init(EQSession * s) {
+err_t easyq_init(EQSession ** session_ptr_ptr) {
     err_t err;
-    s = malloc (sizeof (struct EQSession));
+    EQSession * s = malloc (sizeof (struct EQSession));
 	if (s == NULL) {
 		return ERR_MEM;
 	}
+    s->ready = false;
+
+    s->readbuffer = malloc(EASYQ_READ_BUFFER_SIZE);
+    if (s->readbuffer == NULL) {
+        return ERR_MEM;
+    }
 
     err = easyq_connect(s);
     if (err != ERR_OK) {
@@ -101,30 +111,32 @@ err_t easyq_init(EQSession * s) {
         return err;
     }
 
+    *session_ptr_ptr = s;
+    s->ready = true;
     return ERR_OK;
 }
 
 
-
-
-err_t easyq_read(EQSession * s, char * line, size_t * len) {
-    err_t err;
-	err = lwip_recv(s->socket, line, 32, 0);
-	if (err != ERR_OK){
-		return err;
+err_t easyq_read(EQSession * s, char ** line, size_t * len) {
+    err_t err_or_len;
+    static char buff[128];
+	err_or_len = lwip_recv(s->socket, buff, 128, 0);
+	if (err_or_len < ERR_OK){
+		return err_or_len;
 	}
 
+    buff[err_or_len+1] = '\0';
+    *line = buff; 
+    *len = err_or_len;
     return ERR_OK;
 }
-
 
 
 err_t easyq_write(EQSession * s, char * line, size_t len) {
-    err_t err = lwip_write(s->socket, line, len);
-    if (err != ERR_OK) {
-        return err;
+    err_t err_or_len = lwip_write(s->socket, line, len);
+    if (err_or_len < ERR_OK) {
+        return err_or_len;
     }
-
     return ERR_OK;
 }
 
@@ -139,14 +151,14 @@ err_t easyq_push(EQSession * s, Queue * queue, char * msg, size_t len) {
     return easyq_write(s, line, size);
 }
 
-/*
+
 err_t easyq_pull(EQSession * session, Queue * queue) {
     size_t size;
     char line[14 + queue->len];
     size = sprintf(line, "PULL FROM %s;\n", queue->name);
     return easyq_write(session, line, size);
 }
-*/
+
 
 Queue * Queue_new(char * name) {
     Queue * queue = malloc (sizeof (struct Queue));
