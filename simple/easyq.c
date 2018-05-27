@@ -68,11 +68,12 @@ err_t easyq_login(EQSession * s) {
     if (err != ERR_OK) {
         return err;
     }
-    s->id = malloc(len+1);
+    s->id = malloc(len-3);
     if (s->id == NULL) {
         return ERR_MEM;
     }
-    sprintf(s->id, "%s", retval);
+    memcpy(s->id, &retval[3], len-3);
+    s->id[len] = '\0';
 
     // Everithing is OK
     return ERR_OK;
@@ -81,6 +82,7 @@ err_t easyq_login(EQSession * s) {
 
 void easyq_close(EQSession * s) {
 	lwip_close(s->socket);
+    free(s->readbuffer);
     free(s->id);
 	free(s);
 }
@@ -90,12 +92,14 @@ err_t easyq_init(EQSession ** session_ptr_ptr) {
     err_t err;
     EQSession * s = malloc (sizeof (struct EQSession));
 	if (s == NULL) {
+        easyq_close(s);
 		return ERR_MEM;
 	}
     s->ready = false;
 
     s->readbuffer = malloc(EASYQ_READ_BUFFER_SIZE);
     if (s->readbuffer == NULL) {
+        easyq_close(s);
         return ERR_MEM;
     }
 
@@ -119,16 +123,29 @@ err_t easyq_init(EQSession ** session_ptr_ptr) {
 
 err_t easyq_read(EQSession * s, char ** line, size_t * len) {
     err_t err_or_len;
-    static char buff[128];
-	err_or_len = lwip_recv(s->socket, buff, 128, 0);
-	if (err_or_len < ERR_OK){
-		return err_or_len;
-	}
+    s->readbuffer[0] = '\0';
+    char buff[1];
+    size_t bytes = 0;
+    while(bytes < EASYQ_READ_BUFFER_SIZE) {
+        err_or_len = lwip_recv(s->socket, buff, 1, 0);
+        if (err_or_len < 0){
+        	return err_or_len;
+        } 
+        
+        if (err_or_len == 0 || (bytes == 0 && buff[0] == '\n')) {
+            continue;
+        }
 
-    buff[err_or_len+1] = '\0';
-    *line = buff; 
-    *len = err_or_len;
-    return ERR_OK;
+        if (buff[0] == ';') {
+            s->readbuffer[bytes] = '\0';
+            *line = s->readbuffer;
+            *len = bytes+1;
+            return ERR_OK;
+        }
+        s->readbuffer[bytes] = buff[0];
+        bytes++;
+    } 
+    return ERR_MEM;
 }
 
 

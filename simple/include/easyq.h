@@ -20,7 +20,7 @@
 #endif
 
 #ifndef EASYQ_READ_BUFFER_SIZE
-#define EASYQ_READ_BUFFER_SIZE 128
+#define EASYQ_READ_BUFFER_SIZE 1024
 #endif
 
 
