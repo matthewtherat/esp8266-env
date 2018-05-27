@@ -34,7 +34,7 @@ void sender(void* args) {
         printf("Session ID: %s\n", eq->id);
         while (1) {
             sprintf(buff, "%08d", c);
-            easyq_push(eq, queue, buff, -1);
+            //easyq_push(eq, queue, buff, -1);
             delay(500);
             c++;
         }

@@ -3,6 +3,10 @@
 
 #include "lwip/api.h"
 #include "lwip/ip_addr.h"
+#include "lwip/sockets.h"
+#include "lwip/netdb.h"
+#include "lwip/dns.h"
+#include "lwip/err.h"
 
 #include "easyq_config.h"
 #include "common.h"
@@ -12,8 +16,7 @@
 
 typedef struct EQSession {
 	char * id;
-    struct netconn * conn;
-    ip_addr_t * remote_addr;
+    int socket;
 } EQSession;
 
 typedef struct Queue {
