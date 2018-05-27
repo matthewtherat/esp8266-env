@@ -24,10 +24,10 @@ typedef struct Queue {
     size_t len;
 } Queue;
 
-err_t easyq_init(EQSession ** session);
-void easyq_close(EQSession ** session);
+err_t easyq_init(EQSession * session);
+void easyq_close(EQSession * session);
 
-err_t easyq_read(EQSession * session, char ** line, size_t * len);
+err_t easyq_read(EQSession * session, char * line, size_t * len);
 err_t easyq_write(EQSession * session, char * line, size_t len);
 err_t easyq_push(EQSession * session, Queue * queue, char * msg, size_t len);
 err_t easyq_pull(EQSession * session, Queue * queue);

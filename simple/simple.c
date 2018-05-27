@@ -25,7 +25,7 @@ void sender(void* args) {
     while (1) {
         printf("Inititlizing easyq\n");
         delay(100);
-        err = easyq_init(&eq);
+        err = easyq_init(eq);
         if (err != ERR_OK) {
             printf("Cannot Inititalize the easyq\n");
             delay(1000);
