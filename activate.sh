@@ -9,21 +9,22 @@ if [ ! -z $BACKUP_PATH ]; then
 	return 1	
 fi
 
-if [ (! -z $SDK_PATH) || (! -z $BIN_PATH) ]; then
-	echo "Please set SDK_PATH and BIN_PATH"
+echo "SDK: $SDK_PATH"
+echo "BIN: $BIN_PATH"
+echo "ENV: $ENV_TITLE"
+
+if [ -z "$SDK_PATH" ] || [ -z "$BIN_PATH" ] || [ -z "$ENV_TITLE" ]; then
+	echo "Please set SDK_PATH, ENV_TITLE and BIN_PATH"
 	return 1
 fi
 
 HERE=`dirname "$(readlink -f "$BASH_SOURCE")"`
-TITLE=`basename "$HERE"`
-echo $HERE
-echo $TITLE
 export BACKUP_PATH=$PATH
 export BACKUP_PS1=$PS1
 #export SDK_PATH="$HERE/ESP8266_NONOS_SDK"
 #export BIN_PATH="$here/bin"
 export PATH="$HERE/xtensa-toolchain/bin:$PATH"
-export PS1="($TITLE) $PS1"
+export PS1="($ENV_TITLE) $PS1"
 
 function deactivate {
 	export PATH=$BACKUP_PATH
@@ -32,6 +33,7 @@ function deactivate {
 	unset BACKUP_PS1
 	unset SDK_PATH
 	unset BIN_PATH
+	unset ENV_TITLE 
 	unset -f deactivate
 }
 
