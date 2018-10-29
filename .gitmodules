@@ -1,5 +1,5 @@
 [submodule "esp8266-01-nonos/ESP8266_NONOS_SDK"]
-	path = esp8266-01-nonos/ESP8266_NONOS_SDK
+	path = nonos/sdk
 	url = git@github.com:espressif/ESP8266_NONOS_SDK.git
 [submodule "xtensa-toolchain"]
 	path = xtensa-toolchain

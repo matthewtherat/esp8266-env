@@ -23,7 +23,7 @@ export BACKUP_PATH=$PATH
 export BACKUP_PS1=$PS1
 #export SDK_PATH="$HERE/ESP8266_NONOS_SDK"
 #export BIN_PATH="$here/bin"
-export PATH="$HERE/xtensa-toolchain/bin:$PATH"
+export PATH="$HERE/xtensa-toolchain/bin:$HERE/xtensa-toolchain/xtensa-lx106-elf/bin:$PATH"
 export PS1="($ENV_TITLE) $PS1"
 
 function deactivate {
