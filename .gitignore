@@ -10,4 +10,5 @@ firmware
 local.mk
 local.h
 screenlog.*
-*.swp
+*.sw[po]
+xtensa-lx106-elf

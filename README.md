@@ -11,5 +11,8 @@ sudo apt-get remove modemmanager
 
 ```bash
 git clone --recursive git@github.com:pylover/esp.git
+cd esp/xtensa-toolchain/release
+make linux64
+mv xtensa-toolchain/xtensa-lx106-elf/ ../../
 ```
 
