@@ -10,9 +10,21 @@ sudo apt-get remove modemmanager
 ### Clone and install
 
 ```bash
-git clone --recursive git@github.com:pylover/esp.git
+git clone --recursive git@github.com:easyqiot/esp-env.git
 cd esp/xtensa-toolchain/release
 make linux64
 mv xtensa-toolchain/xtensa-lx106-elf/ ../../
 ```
 
+### How to use
+
+```bash
+source esp-env/nonos/activate.sh
+
+cd esp-env/nonos/sdk
+cp -r exampls/simple_pair .
+cd simple_pair 
+bash gen_misc.sh
+
+
+```
