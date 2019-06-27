@@ -1,3 +1,6 @@
 [submodule "xtensa-toolchain"]
 	path = xtensa-toolchain
 	url = git@github.com:easyqiot/xtensa-toolchain.git
+[submodule "sdk"]
+	path = sdk
+	url = git@github.com:espressif/ESP8266_NONOS_SDK.git
