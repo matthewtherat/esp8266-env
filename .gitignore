@@ -11,4 +11,3 @@ local.mk
 local.h
 screenlog.*
 *.sw[po]
-xtensa-lx106-elf
