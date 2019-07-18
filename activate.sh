@@ -22,6 +22,11 @@ TOOLCHAIN=$HERE/xtensa-toolchain/release/xtensa-toolchain/xtensa-lx106-elf
 export PATH="$TOOLCHAIN/bin:$PATH"
 export PS1="($ENV_TITLE) $PS1"
 
+function esp.sc() {
+	screen "/dev/ttyUSB$1" 115200
+}
+
+
 echo "SDK: $SDK_PATH"
 echo "BIN: $BIN_PATH"
 echo "ENV: $ENV_TITLE"
@@ -42,4 +47,6 @@ function deactivate {
 	unset BACKUP_BIN_PATH	
 	unset BACKUP_ENV_TITLE
    	unset -f deactivate
+	unset -f esp.sc
 }
+
