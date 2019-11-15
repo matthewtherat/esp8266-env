@@ -13,7 +13,7 @@ to setup your environment.
 cd esp-env
 source activate.sh
 
-cd fota 
+cd helloworld 
 bash gen_misc.sh
 ```
 
