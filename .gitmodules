@@ -3,4 +3,4 @@
 	url = git@github.com:noduino/xtensa-toolchain.git
 [submodule "sdk"]
 	path = sdk
-	url = git@github.com:espressif/ESP8266_NONOS_SDK.git
+	url = git@github.com:pylover/ESP8266_NONOS_SDK.git
