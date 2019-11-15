@@ -10,9 +10,8 @@ sudo apt-get remove modemmanager
 ### Clone and install
 
 ```bash
-git clone --recursive git@github.com:easyqiot/esp-env.git
-cd esp/xtensa-toolchain/release
-make linux64
+git clone --recursive git@github.com:pylover/esp8266-env.git 
+./setup.sh
 ```
 
 ### How to use
@@ -20,9 +19,7 @@ make linux64
 ```bash
 source activate.sh
 
-cd sdk
-cp -r exampls/simple_pair .
-cd simple_pair 
+cd sdk/examples/simple_pair
 ./gen_misc.sh
 
 

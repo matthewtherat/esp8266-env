@@ -13,3 +13,6 @@ screenlog.*
 *.sw[po]
 
 bin
+backup
+
+
