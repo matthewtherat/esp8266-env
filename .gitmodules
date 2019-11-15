@@ -1,6 +1,6 @@
 [submodule "xtensa-toolchain"]
 	path = xtensa-toolchain
-	url = git@github.com:noduino/xtensa-toolchain.git
+	url = git@github.com:pylover/xtensa-toolchain.git
 [submodule "sdk"]
 	path = sdk
 	url = git@github.com:pylover/ESP8266_NONOS_SDK.git
