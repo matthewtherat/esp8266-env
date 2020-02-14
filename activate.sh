@@ -26,6 +26,10 @@ function esp.sc() {
 	screen "/dev/ttyUSB$1" 115200
 }
 
+if [ ! -d "$HERE/bin" ]; then
+	echo "$HERE/bin directory not exists, trying to create it"
+	mkdir "$HERE/bin"
+fi
 
 echo "SDK: $SDK_PATH"
 echo "BIN: $BIN_PATH"
