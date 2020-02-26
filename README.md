@@ -1,4 +1,4 @@
-# esp
+# esp8266 development environment
 
 ```bash
 sudo apt-get remove modemmanager python3-pip
