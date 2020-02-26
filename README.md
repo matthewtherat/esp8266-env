@@ -2,6 +2,8 @@
 
 ```bash
 sudo apt-get remove modemmanager python3-pip
+sudo apt-get install python3-pip
+sudo -H pip3 install --upgrade pip setuptools wheel
 ```
 
 ## Building the cross compile environment
