@@ -1,7 +1,7 @@
 # esp
 
 ```bash
-sudo apt-get remove modemmanager
+sudo apt-get remove modemmanager python3-pip
 ```
 
 ## Building the cross compile environment
