@@ -125,8 +125,10 @@ INCLUDES := $(INCLUDES) \
 PDIR = $(SDKDIR)/
 sinclude $(SDKDIR)/Makefile
 
-BAUDRATE = 576000
+BAUDRATE = 115200
+PORT = /dev/ttyUSB0
 ESPTOOL = esptool.py --baud $(BAUDRATE) write_flash -u --flash_mode qio --flash_freq 40m
+HOST := 192.168.8.150
 
 .PHONY: map6user2
 map6user2:
@@ -136,10 +138,10 @@ map6user2:
 
 .PHONY: fota 
 fota: map6user2
-	-curl 192.168.0.162/firmware -XPOST -F"firmware=@../bin/upgrade/user2.4096.new.6.bin"
+	-curl $(HOST)/firmware -XPOST -F"firmware=@../bin/upgrade/user2.4096.new.6.bin"
 	-echo
 
-.PHONY: pp
-pp:
-	@python -c"print('hello')"
+.PHONY: screen
+screen:
+	@screen $(PORT) $(BAUDRATE)
 

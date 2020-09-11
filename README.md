@@ -16,10 +16,46 @@ cd esp8266-env
 
 ### Hello World!
 
+First, build and flash the FOTA image.
 ```bash
-cd helloworld
-make map6user2
+cd fota
+make clean
+make cleanup_map6user1
+make assets_map6user1
+make flash_map6user1
 ```
+
+Then search for WIFI access point named something like `NewDevice_xxxxxxxxxxx`
+, connect and open the address http://192.168.43.1 to configure the newly 
+cooked device. Then press reboot.
+
+Use `avahi-browse` to find the new device's IP Address:
+
+```bash
+avahi-browse -a
+```
+
+Output example:
+
+```
+E Ifce Prot Name                                          Type                 Domain
++   wlo1 IPv4 tvcontroller                                  _ESPWebAdmin._tcp    local
+=   wlo1 IPv4 tvcontroller                                  _ESPWebAdmin._tcp    local
+   hostname = [tvcontroller.local]
+   address = [192.168.8.150]
+   port = [80]
+   txt = ["version = 0.1.0" "vendor = Espressif"]
+: Cache exhausted
+```
+
+Now, transfer the `helloworld` firmware over the air using:
+
+```bash
+cd ../helloworld
+make map6user2
+make fota HOST=192.168.8.150
+```
+
 
 
 ### SDK Examples
