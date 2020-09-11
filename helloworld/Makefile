@@ -139,3 +139,7 @@ fota: map6user2
 	-curl 192.168.0.162/firmware -XPOST -F"firmware=@../bin/upgrade/user2.4096.new.6.bin"
 	-echo
 
+.PHONY: pp
+pp:
+	@python -c"print('hello')"
+

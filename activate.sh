@@ -9,6 +9,7 @@ if [ ! -z $BACKUP_PATH ]; then
 	return 1	
 fi
 
+
 HERE=`dirname "$(readlink -f "$BASH_SOURCE")"`
 export BACKUP_PATH=$PATH
 export BACKUP_PS1=$PS1
@@ -21,6 +22,7 @@ export ENV_TITLE="esp-nonos"
 TOOLCHAIN=$HERE/xtensa-toolchain/release/xtensa-toolchain/xtensa-lx106-elf
 export PATH="$TOOLCHAIN/bin:$PATH"
 export PS1="($ENV_TITLE) $PS1"
+
 
 function esp.sc() {
 	screen "/dev/ttyUSB$1" 115200
