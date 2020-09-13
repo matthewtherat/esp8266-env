@@ -2,7 +2,7 @@
 
 ```bash
 sudo apt-get remove modemmanager
-sudo apt-get install python2.7 python3-pip
+sudo apt-get install python2.7 python3-pip screen
 sudo -H pip3 install --upgrade pip setuptools wheel
 ```
 
@@ -18,9 +18,9 @@ cd esp8266-env
 
 First, build and flash the FOTA image.
 ```bash
+cd esp8266-env
+source activate.sh
 cd fota
-make clean
-make cleanup_map6user1
 make assets_map6user1
 make flash_map6user1
 ```
