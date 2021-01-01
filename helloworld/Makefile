@@ -28,7 +28,7 @@ SUBDIRS=    \
 endif # } PDIR
 
 APPDIR = .
-LDDIR = ./ld
+LDDIR = $(SDKDIR)/ld
 
 CCFLAGS += -Os
 
