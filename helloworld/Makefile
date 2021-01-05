@@ -26,7 +26,7 @@ SUBDIRS=    \
 	user 
 
 endif # } PDIR
-
+BINDIR = ./bin
 APPDIR = .
 LDDIR = $(SDKDIR)/ld
 
@@ -125,10 +125,27 @@ INCLUDES := $(INCLUDES) \
 PDIR = $(SDKDIR)/
 sinclude $(SDKDIR)/Makefile
 
-BAUDRATE = 115200
 PORT = /dev/ttyUSB0
-ESPTOOL = esptool.py --baud $(BAUDRATE) write_flash -u --flash_mode qio --flash_freq 40m
 HOST := 192.168.8.150
+
+BAUDRATE = 115200
+FLASH_BAUDRATE = 115200
+
+ESPTOOL = esptool.py --baud $(FLASH_BAUDRATE) --port $(PORT)
+ESPTOOL_WRITE = $(ESPTOOL)  write_flash -u --flash_mode qio --flash_freq 40m
+
+
+.PHONY: map6
+map6:
+	make clean
+	make COMPILE=gcc BOOT=new APP=0 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=6
+
+
+.PHONY: map6user1
+map6user1:
+	make clean
+	make COMPILE=gcc BOOT=new APP=1 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE_MAP=6
+
 
 .PHONY: map6user2
 map6user2:
@@ -138,10 +155,61 @@ map6user2:
 
 .PHONY: fota 
 fota: map6user2
-	-curl $(HOST)/firmware -XPOST -F"firmware=@../bin/upgrade/user2.4096.new.6.bin"
+	-curl $(HOST)/firmware -XPOST -F"firmware=@$(BINDIR)/upgrade/user2.4096.new.6.bin"
 	-echo
 
 .PHONY: screen
 screen:
 	@screen $(PORT) $(BAUDRATE)
+
+
+.PHONY: erase_flash
+erase_flash:
+	 $(ESPTOOL) erase_flash
+
+
+.PHONY: assets_map2user1
+assets_map2user1:
+	$(ESPTOOL_WRITE) --flash_size 4MB-c1  \
+		0x77000 assets/favicon-16x16.png
+
+flash_map2user1: map2user1
+	$(ESPTOOL_WRITE) --flash_size 1MB  \
+		0x0 	$(SDK_PATH)/bin/boot_v1.7.bin \
+		0x1000  $(BINDIR)/upgrade/user1.1024.new.2.bin \
+		0xfc000 $(SDK_PATH)/bin/esp_init_data_default_v08.bin \
+		0xfb000 $(SDK_PATH)/bin/blank.bin \
+		0xfe000 $(SDK_PATH)/bin/blank.bin
+
+.PHONY: flash_map6user1
+flash_map6user1: map6user1
+	$(ESPTOOL_WRITE) --flash_size 4MB-c1  \
+		0x0 	 $(SDK_PATH)/bin/boot_v1.7.bin \
+		0x1000   $(BINDIR)/upgrade/user1.4096.new.6.bin \
+		0x3fc000 $(SDK_PATH)/bin/esp_init_data_default_v08.bin \
+		0x3fb000 $(SDK_PATH)/bin/blank.bin \
+		0x3fe000 $(SDK_PATH)/bin/blank.bin 
+
+.PHONY: cleanup_map6user1
+cleanup_map6user1:
+	$(ESPTOOL_WRITE) --flash_size 4MB-c1  \
+		0xf9000 $(SDK_PATH)/bin/blank.bin \
+		0xfa000 $(SDK_PATH)/bin/blank.bin 
+
+.PHONY: cleanup_map6user1_params
+cleanup_map6user1_params:
+	$(ESPTOOL_WRITE) --flash_size 4MB-c1  \
+		0xf8000 $(BINDIR)/blank.bin \
+		0xf9000 $(BINDIR)/blank.bin \
+		0xfa000 $(BINDIR)/blank.bin 
+
+.PHONY: assets_map6user1
+assets_map6user1:
+	$(ESPTOOL_WRITE) --flash_size 4MB-c1  \
+		0x200000 assets/favicon-16x16.png 
+
+.PHONY: erase_flash
+earase_flash:
+	$(ESPTOOL) earase_flash
+
 
