@@ -14,10 +14,10 @@ HERE=`dirname "$(readlink -f "$BASH_SOURCE")"`
 export BACKUP_PATH=$PATH
 export BACKUP_PS1=$PS1
 export BACKUP_SDK_PATH=$SDK_PATH
-export BACKUP_BIN_PATH=$BIN_PATH
+export BACKUP_BINDIR=$BINDIR
 export BACKUP_ENV_TITLE=$ENV_TITLE
 export SDK_PATH=$HERE/sdk
-export BIN_PATH="$HERE/bin"
+export BINDIR="$HERE/bin"
 export ENV_TITLE="esp-nonos"
 TOOLCHAIN=$HERE/xtensa-toolchain/release/xtensa-toolchain/xtensa-lx106-elf
 export PATH="$TOOLCHAIN/bin:$PATH"
@@ -34,7 +34,7 @@ if [ ! -d "$HERE/bin" ]; then
 fi
 
 echo "SDK: $SDK_PATH"
-echo "BIN: $BIN_PATH"
+echo "BIN: $BINDIR"
 echo "ENV: $ENV_TITLE"
 
 
@@ -42,15 +42,15 @@ function deactivate {
 	export PATH=$BACKUP_PATH
 	export PS1=$BACKUP_PS1
 	export SDK_PATH=$BACKUP_SDK_PATH
-	export BIN_PATH=$BACKUP_BIN_PATH
+	export BINDIR=$BACKUP_BINDIR
 	export ENV_TITLE=$BACKUP_ENV_TITLE
 	unset BACKUP_PATH
 	unset BACKUP_PS1
 	unset SDK_PATH
-	unset BIN_PATH
+	unset BINDIR
 	unset ENV_TITLE 
 	unset BACKUP_SDK_PATH
-	unset BACKUP_BIN_PATH	
+	unset BACKUP_BINDIR	
 	unset BACKUP_ENV_TITLE
    	unset -f deactivate
 	unset -f esp.sc

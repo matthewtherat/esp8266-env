@@ -1,5 +1,4 @@
-# FOTA 
-Formware over the air transmission using easyQ.
+# esp8266-helloworld 
 
 
 

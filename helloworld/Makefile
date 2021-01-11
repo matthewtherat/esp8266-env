@@ -15,7 +15,6 @@ TARGET = eagle
 #FLAVOR = release
 FLAVOR = debug
 
-SDKDIR = ${SDK_PATH}
 #EXTRA_CCFLAGS += -u
 
 ifndef PDIR # {
@@ -28,7 +27,7 @@ SUBDIRS=    \
 endif # } PDIR
 BINDIR = ./bin
 APPDIR = .
-LDDIR = $(SDKDIR)/ld
+LDDIR = $(SDK_PATH)/ld
 
 CCFLAGS += -Os
 
@@ -50,7 +49,7 @@ COMPONENTS_eagle.app.v6 = \
 	user/libuser.a 
 
 LINKFLAGS_eagle.app.v6 = \
-	-L$(SDKDIR)/lib        \
+	-L$(SDK_PATH)/lib        \
 	-nostdlib	\
     -T$(LD_FILE)   \
 	-Wl,--no-check-sections	\
@@ -122,8 +121,8 @@ DDEFINES +=				\
 INCLUDES := $(INCLUDES) \
 	-I $(PDIR)include 
 
-PDIR = $(SDKDIR)/
-sinclude $(SDKDIR)/Makefile
+PDIR = $(SDK_PATH)/
+sinclude $(SDK_PATH)/Makefile
 
 PORT = /dev/ttyUSB0
 HOST := 192.168.8.150
