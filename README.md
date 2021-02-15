@@ -51,12 +51,11 @@ E Ifce Prot Name                                          Type                 D
 Now, transfer the `helloworld` firmware over the air using:
 
 ```bash
-cd ../helloworld
+esp8266-newproject helloworld
+cd helloworld
 make map6user2
 make fota HOST=192.168.8.150
 ```
-
-
 
 ### SDK Examples
 
