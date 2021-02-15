@@ -37,22 +37,26 @@ echo "SDK: $SDK_PATH"
 echo "BIN: $BINDIR"
 echo "ENV: $ENV_TITLE"
 
-
+function esp8266-newproject {
+  $HERE/new-project.sh $@
+}
+	
 function deactivate {
-	export PATH=$BACKUP_PATH
-	export PS1=$BACKUP_PS1
-	export SDK_PATH=$BACKUP_SDK_PATH
-	export BINDIR=$BACKUP_BINDIR
-	export ENV_TITLE=$BACKUP_ENV_TITLE
-	unset BACKUP_PATH
-	unset BACKUP_PS1
-	unset SDK_PATH
-	unset BINDIR
-	unset ENV_TITLE 
-	unset BACKUP_SDK_PATH
-	unset BACKUP_BINDIR	
-	unset BACKUP_ENV_TITLE
-   	unset -f deactivate
-	unset -f esp.sc
+  export PATH=$BACKUP_PATH
+  export PS1=$BACKUP_PS1
+  export SDK_PATH=$BACKUP_SDK_PATH
+  export BINDIR=$BACKUP_BINDIR
+  export ENV_TITLE=$BACKUP_ENV_TITLE
+  unset BACKUP_PATH
+  unset BACKUP_PS1
+  unset SDK_PATH
+  unset BINDIR
+  unset ENV_TITLE 
+  unset BACKUP_SDK_PATH
+  unset BACKUP_BINDIR	
+  unset BACKUP_ENV_TITLE
+  unset -f deactivate
+  unset -f esp.sc
+  unset -f esp8266-newproject
 }
 

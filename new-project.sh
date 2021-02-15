@@ -1,11 +1,17 @@
 #! /usr/bin/env bash
 
+if [ -z $1 ]; then
+  read -p "Project directory (will be created by script): " DEST
+else
+  DEST=$1
+fi
+
 SRC=`readlink -f $SDK_PATH/../fota`
-DEST=$1
 
 set -e
 
 function copyfota () {
+  echo "Copy initial files"
   if [ -d "$DEST" ]; then
     read -p "Directory $DEST already exists. delete it [NO/yes]? " deldest
     if [ "$deldest" != "yes" ]; then
@@ -19,10 +25,30 @@ function copyfota () {
 }
 
 
-function removefotalines () {
+function addsubmodules () {
+  echo "Initialize git repo"
+  git -C $DEST init
+
+  echo "Add submodules"
+  git -C $DEST submodule add \
+    https://github.com/pylover/esp8266-httpserver.git \
+    httpd
+
+  git -C $DEST submodule add \
+    https://github.com/pylover/esp8266-unslib.git \
+    uns
+}
+
+
+function cleanup () {
+  echo "Remove unneeded directories"
+  rmdir $DEST/httpd
+  rmdir $DEST/uns
+  rm -rf $DEST/fota
+
+  echo "Remove fota lines"
   sed -i '/^#include "fotaweb.h"/d' $DEST/user/webadmin.c
   sed -i '/fotaweb_upgrade_firmware/d' $DEST/user/webadmin.c
-  rm -rf $DEST/fota
 
   sed -i '/^\tfota/d' $DEST/Makefile
   sed -i '/^\tfota\/libfota.a/d' $DEST/Makefile
@@ -33,6 +59,8 @@ function removefotalines () {
 
 
 function updatereadme () {
+  echo "Updating readme file."
+
   echo '
 # Helloword 
 
@@ -63,17 +91,13 @@ make flash_map6user1
 }
 
 
-echo "Copy initial files"
-
 copyfota
-
-echo "Remove fota lines"
-
-removefotalines
-
-echo "Updating readme file"
-
+cleanup
 updatereadme
+addsubmodules
 
-echo "done."
+echo "Compile"
+
+cd $DEST
+make map6user1
 
