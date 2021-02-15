@@ -10,7 +10,3 @@
 	path = fota
 	url = git@github.com:pylover/esp8266-fota.git
 	update = rebase
-
-[submodule "helloworld"]
-	path = helloworld
-	url = git@github.com:pylover/esp8266-boilerplate.git
