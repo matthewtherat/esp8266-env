@@ -16,6 +16,7 @@ export BACKUP_PS1=$PS1
 export BACKUP_SDK_PATH=$SDK_PATH
 export BACKUP_BINDIR=$BINDIR
 export BACKUP_ENV_TITLE=$ENV_TITLE
+export ENVDIR=$HERE
 export SDK_PATH=$HERE/sdk
 export BINDIR="$HERE/bin"
 export ENV_TITLE="esp-nonos"
@@ -38,9 +39,10 @@ echo "BIN: $BINDIR"
 echo "ENV: $ENV_TITLE"
 
 function esp8266-newproject {
-  $HERE/new-project.sh $@
+  $ENVDIR/new-project.sh $@
 }
-	
+typeset -fx esp8266-newproject
+
 function deactivate {
   export PATH=$BACKUP_PATH
   export PS1=$BACKUP_PS1
@@ -52,6 +54,7 @@ function deactivate {
   unset SDK_PATH
   unset BINDIR
   unset ENV_TITLE 
+  unset ENVDIR 
   unset BACKUP_SDK_PATH
   unset BACKUP_BINDIR	
   unset BACKUP_ENV_TITLE

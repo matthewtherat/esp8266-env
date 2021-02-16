@@ -30,11 +30,11 @@ function addsubmodules () {
   git -C $DEST init
 
   echo "Add submodules"
-  git -C $DEST submodule add \
+  git -C $DEST submodule add --depth 1 \
     https://github.com/pylover/esp8266-httpserver.git \
     httpd
 
-  git -C $DEST submodule add \
+  git -C $DEST submodule add --depth 1 \
     https://github.com/pylover/esp8266-unslib.git \
     uns
 }
