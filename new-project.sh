@@ -55,6 +55,10 @@ function cleanup () {
   sed -i '/\/fota\/include/d' $DEST/Makefile
   
   sed -i 's|Fota Image|Helloworld|g' $DEST/include/user_config.h
+  sed -i 's|REBOOTDELAY\s\+[0-9]\+|REBOOTDELAY    0|g' \
+    $DEST/include/user_config.h
+
+  sed -i 's|{"APP",|{"FOTA",|g' $DEST/user/webadmin.c
 }
 
 

@@ -21,40 +21,38 @@ First, build and flash the FOTA image.
 cd esp8266-env
 source activate.sh
 cd fota
+make cleanup_map6user1_params
 make assets_map6user1
 make flash_map6user1
 ```
+
+You may use `make screen` to view esp debug console. use `CTRL+A` then `k` to
+exit.
 
 Then search for WIFI access point named something like `NewDevice_xxxxxxxxxxx`
 , connect and open the address http://192.168.43.1 to configure the newly 
 cooked device. Then press reboot.
 
-Use `avahi-browse` to find the new device's IP Address:
+Use `uns discover` to find the new device's IP Address:
 
 ```bash
-avahi-browse -a
+uns d home.NewDevice
 ```
 
 Output example:
 
 ```
-E Ifce Prot Name                                          Type                 Domain
-+   wlo1 IPv4 tvcontroller                                  _ESPWebAdmin._tcp    local
-=   wlo1 IPv4 tvcontroller                                  _ESPWebAdmin._tcp    local
-   hostname = [tvcontroller.local]
-   address = [192.168.8.150]
-   port = [80]
-   txt = ["version = 0.1.0" "vendor = Espressif"]
-: Cache exhausted
+Sending home. to 224.0.0.70:5333
+192.168.8.162:5333: home.NewDevice
 ```
 
-Now, transfer the `helloworld` firmware over the air using:
+Now, create and transfer the `helloworld` firmware over the air using:
 
 ```bash
 esp8266-newproject helloworld
 cd helloworld
 make map6user2
-make fota HOST=192.168.8.150
+make fota HOST=$(uns d -s home.NewDevice)
 ```
 
 ### SDK Examples

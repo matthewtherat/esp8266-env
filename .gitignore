@@ -11,6 +11,7 @@ local.mk
 local.h
 screenlog.*
 *.sw[po]
+.ropeproject
 .output
 
 bin

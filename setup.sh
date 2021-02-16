@@ -6,7 +6,10 @@ make linux64
 cd ../../
 
 # Install esptool
-sudo -H pip3 install esptool
+pip3 install esptool
+
+# Install unslib command line utility
+pip3 install fota/uns
 
 # Build libhttpserver
 cd sdk/httpserver
