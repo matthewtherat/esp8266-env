@@ -55,6 +55,9 @@ make map6user2
 make fota HOST=$(uns d -s home.NewDevice)
 ```
 
+or edit the `Makefile` and set `HOST ?= home.newDevice` to make it simpler.
+
+
 ### SDK Examples
 
 ```bash
