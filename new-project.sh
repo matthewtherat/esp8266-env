@@ -16,7 +16,7 @@ function copyfota () {
     read -p "Directory $DEST already exists. delete it [NO/yes]? " deldest
     if [ "$deldest" != "yes" ]; then
       >&2 echo "Directory $DEST is already exists. Aborting."
-      exit
+      return 1
     fi
     rm -rf $DEST
   fi
@@ -37,12 +37,17 @@ function addsubmodules () {
   git -C $DEST submodule add --depth 1 \
     https://github.com/pylover/esp8266-unslib.git \
     uns
+
+  git -C $DEST submodule add --depth 1 \
+    https://github.com/pylover/esp8266-httpclient.git \
+    http
 }
 
 
 function cleanup () {
   echo "Remove unneeded directories"
   rmdir $DEST/httpd
+  rmdir $DEST/http
   rmdir $DEST/uns
   rm -rf $DEST/fota
 
