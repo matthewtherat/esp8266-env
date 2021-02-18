@@ -6,6 +6,11 @@ else
   DEST=$1
 fi
 
+echo "Choose spi size and map"
+echo "  2: 1024KB( 512KB+ 512KB)"
+echo "  6: 4096KB(1024KB+1024KB)"
+read -p "enter (2/6, default 6): " SPIMAP
+
 SRC=`readlink -f $SDK_PATH/../fota`
 
 set -e
@@ -108,5 +113,5 @@ addsubmodules
 echo "Compile"
 
 cd $DEST
-make map6user1
+make map${SPIMAP}user1
 

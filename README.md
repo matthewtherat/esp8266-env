@@ -33,7 +33,7 @@ Then search for WIFI access point named something like `NewDevice_xxxxxxxxxxx`
 , connect and open the address http://192.168.43.1 to configure the newly 
 cooked device. Then press reboot.
 
-Use `uns discover` to find the new device's IP Address:
+Use `uns resolve` to find the new device's IP Address:
 
 ```bash
 uns d home.NewDevice
