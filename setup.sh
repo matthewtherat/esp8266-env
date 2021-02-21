@@ -9,7 +9,7 @@ cd ../../
 pip3 install esptool
 
 # Install unslib command line utility
-pip3 install fota/uns
+pip3 install uns
 
 # Build libhttpserver
 cd sdk/httpserver
