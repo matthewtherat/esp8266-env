@@ -6,45 +6,55 @@ else
   DEST=$1
 fi
 
-echo "Choose spi size and map"
-echo "  2: 1024KB( 512KB+ 512KB)"
-echo "  6: 4096KB(1024KB+1024KB)"
-read -p "enter (2/6, default 6): " SPIMAP
-
 SRC=`readlink -f $SDK_PATH/../fota`
 
 set -e
 
-function copyfota () {
-  echo "Copy initial files"
+function preparedestination () {
+  echo "Prepare destination"
   if [ -d "$DEST" ]; then
     read -p "Directory $DEST already exists. delete it [NO/yes]? " deldest
     if [ "$deldest" != "yes" ]; then
-      >&2 echo "Directory $DEST is already exists. Aborting."
-      return 1
+      return
     fi
+    echo "Removing directory $DEST."
     rm -rf $DEST
   fi
   mkdir -p $DEST
+}
+
+
+function copyfota () {
+  echo "Copy initial files"
   git -C $SRC archive --format=tar HEAD | tar -xvC $DEST/
 }
 
 
 function addsubmodules () {
-  echo "Initialize git repo"
-  git -C $DEST init
+  local proto
+  local url
 
-  echo "Add submodules"
-  git -C $DEST submodule add --depth 1 \
-    https://github.com/pylover/esp8266-httpserver.git \
+  if [ ! -d "$DEST/.git" ]; then
+    echo "Initializing a new git repository."
+    git -C $DEST init
+  fi
+  
+  echo "Protocol to clone submodules:"
+  echo "  1. https (default)"
+  echo "  2. ssh"
+  read -p "[1/2]?" proto
+
+  if [ "$proto" == "1" ]; then
+    url='https://github.com/pylover'
+  else
+    url='git@github.com:pylover'
+  fi
+
+  echo "Cloning submodules"
+  git -C $DEST submodule add --force --depth 1 ${url}/esp8266-httpserver.git \
     httpd
-
-  git -C $DEST submodule add --depth 1 \
-    https://github.com/pylover/esp8266-unslib.git \
-    uns
-
-  git -C $DEST submodule add --depth 1 \
-    https://github.com/pylover/esp8266-httpclient.git \
+  git -C $DEST submodule add --force --depth 1 ${url}/esp8266-unslib.git uns
+  git -C $DEST submodule add --force --depth 1 ${url}/esp8266-httpclient.git \
     http
 }
 
@@ -104,7 +114,7 @@ make flash_map6user1
 
 }
 
-
+preparedestination
 copyfota
 cleanup
 updatereadme
@@ -113,5 +123,16 @@ addsubmodules
 echo "Compile"
 
 cd $DEST
+
+echo "Choose spi size and map to compile:"
+echo "  2: 1024KB( 512KB+ 512KB)"
+echo "  6: 4096KB(1024KB+1024KB)"
+read -p "enter (2/6, default 6): " SPIMAP
+
+if [ -z $SPIMAP ]; then
+  SPIMAP=6
+fi
+
+
 make map${SPIMAP}user1
 
