@@ -73,7 +73,11 @@ function cleanup () {
   rmdir $DEST/uns
 
   echo "Remove fota lines"
-  sed -i "s|Fota Image|${PRJ}|g" $DEST/include/user_config.h
+  sed -i "s|#define __name__.*|#define __name__ \"${PRJ}\"|g" \
+    $DEST/include/user_config.h
+
+  sed -i "s|#define __version__.*|#define __version__ \"0.1.0\"|g" \
+    $DEST/include/user_config.h
 }
 
 
