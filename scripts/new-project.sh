@@ -1,11 +1,14 @@
 #! /usr/bin/env bash
 
 if [ -z $1 ]; then
-  read -p "Project directory (will be created by script): " DEST
+  read -p "Enter project name (will be created by script): " DEST
 else
   DEST=$1
 fi
 
+
+DEST=`readlink -f $DEST`
+PRJ=`basename $DEST`
 SRC=`readlink -f $SDK_PATH/../fota`
 
 set -e
@@ -13,12 +16,11 @@ set -e
 function preparedestination () {
   echo "Prepare destination"
   if [ -d "$DEST" ]; then
-    read -p "Directory $DEST already exists. delete it [NO/yes]? " deldest
-    if [ "$deldest" != "yes" ]; then
-      return
+    read -p "Directory $DEST already exists. Overwrite? [NO/yes] " overwrite
+    if [ "$overwrite" != "yes" ]; then
+      return 1
     fi
-    echo "Removing directory $DEST."
-    rm -rf $DEST
+    echo "Overwriting directory $DEST."
   fi
   mkdir -p $DEST
 }
@@ -42,7 +44,7 @@ function addsubmodules () {
   echo "Protocol to clone submodules:"
   echo "  1. https (default)"
   echo "  2. ssh"
-  read -p "[1/2]?" proto
+  read -p "[1/2]? " proto
 
   if [ "$proto" == "1" ]; then
     url='https://github.com/pylover'
@@ -56,29 +58,22 @@ function addsubmodules () {
   git -C $DEST submodule add --force --depth 1 ${url}/esp8266-unslib.git uns
   git -C $DEST submodule add --force --depth 1 ${url}/esp8266-httpclient.git \
     http
+  git -C $DEST submodule add --force --depth 1 ${url}/esp8266-debug.git debug
+  git -C $DEST submodule add --force --depth 1 ${url}/esp8266-ringbuffer.git \
+    ringbuffer
 }
 
 
 function cleanup () {
   echo "Remove unneeded directories"
-  rmdir $DEST/httpd
+  rmdir $DEST/debug
   rmdir $DEST/http
+  rmdir $DEST/httpd
+  rmdir $DEST/ringbuffer
   rmdir $DEST/uns
-  rm -rf $DEST/fota
 
   echo "Remove fota lines"
-  sed -i '/^#include "fotaweb.h"/d' $DEST/user/webadmin.c
-  sed -i '/fotaweb_upgrade_firmware/d' $DEST/user/webadmin.c
-
-  sed -i '/^\tfota/d' $DEST/Makefile
-  sed -i '/^\tfota\/libfota.a/d' $DEST/Makefile
-  sed -i '/\/fota\/include/d' $DEST/Makefile
-  
-  sed -i 's|Fota Image|Helloworld|g' $DEST/include/user_config.h
-  sed -i 's|REBOOTDELAY\s\+[0-9]\+|REBOOTDELAY    0|g' \
-    $DEST/include/user_config.h
-
-  sed -i 's|{"APP",|{"FOTA",|g' $DEST/user/webadmin.c
+  sed -i "s|Fota Image|${PRJ}|g" $DEST/include/user_config.h
 }
 
 
@@ -98,7 +93,7 @@ cd esp8266-env
 source activate.sh
 cd ..
 
-cd $DEST 
+cd <project>
 bash gen_misc.sh
 ```
 
@@ -115,6 +110,11 @@ make flash_map6user1
 }
 
 preparedestination
+
+echo "Project Name: ${PRJ}"
+echo "Destination: ${DEST}"
+echo "Source: ${SRC}"
+
 copyfota
 cleanup
 updatereadme

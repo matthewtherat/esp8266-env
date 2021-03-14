@@ -39,7 +39,7 @@ echo "BIN: $BINDIR"
 echo "ENV: $ENV_TITLE"
 
 function esp8266-newproject {
-  $ENVDIR/new-project.sh $@
+  $ENVDIR/scripts/new-project.sh $@
 }
 typeset -fx esp8266-newproject
 
