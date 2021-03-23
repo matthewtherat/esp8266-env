@@ -2,7 +2,7 @@
 
 ```bash
 sudo apt-get remove modemmanager
-sudo apt-get install python2.7 python3-pip screen
+sudo apt-get install python2.7 python3-pip screen qpdf
 sudo -H pip3 install --upgrade pip setuptools wheel
 ```
 
@@ -11,7 +11,7 @@ sudo -H pip3 install --upgrade pip setuptools wheel
 ```bash
 git clone --recursive git@github.com:pylover/esp8266-env.git 
 cd esp8266-env
-./setup.sh
+scripts/setup.sh
 ```
 
 ### Hello World!

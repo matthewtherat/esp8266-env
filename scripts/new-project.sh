@@ -130,8 +130,9 @@ cd $DEST
 
 echo "Choose spi size and map to compile:"
 echo "  2: 1024KB( 512KB+ 512KB)"
+echo "  4: 4096KB( 512KB+ 512KB)"
 echo "  6: 4096KB(1024KB+1024KB)"
-read -p "enter (2/6, default 6): " SPIMAP
+read -p "enter (2/4/6, default 6): " SPIMAP
 
 if [ -z $SPIMAP ]; then
   SPIMAP=6
