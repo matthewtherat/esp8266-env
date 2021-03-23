@@ -105,8 +105,12 @@ Or use predefined make macros:
 
 ```bash
 make clean
-make assets_map6user1
 make flash_map6user1 
+
+cd webui
+npm install
+cd ..
+make flash_map6webui
 
 ```
 ' > $DEST/README.md
