@@ -20,9 +20,12 @@ First, build and flash the FOTA image.
 ```bash
 cd esp8266-env
 source activate.sh
-cd fota
+cd fota/webui
+npm install
+
+cd ..
 make cleanup_map6user1_params
-make assets_map6user1
+make flash_map6webui
 make flash_map6user1
 ```
 
