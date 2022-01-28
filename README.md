@@ -45,8 +45,14 @@ uns d home.NewDevice
 Output example:
 
 ```
-Sending home. to 224.0.0.70:5333
 192.168.8.162:5333: home.NewDevice
+```
+
+Some routers will not work with multicast properly, if the previous command
+failed, you may edit the `~/.cache/uns` and add this line:
+
+```
+192.168.8.162 home.NewDevice
 ```
 
 Now, create and transfer the `helloworld` firmware over the air using:
