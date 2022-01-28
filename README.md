@@ -24,7 +24,7 @@ cd fota/webui
 npm install
 
 cd ..
-make cleanup_map6user1_params
+make cleanup_map6params
 make flash_map6webui
 make flash_map6user1
 ```
@@ -54,7 +54,7 @@ Now, create and transfer the `helloworld` firmware over the air using:
 ```bash
 esp8266-newproject helloworld
 cd helloworld
-make map6user2
+make fotamap6
 make fota HOST=$(uns d -s home.NewDevice)
 ```
 
