@@ -24,11 +24,6 @@ TOOLCHAIN=$HERE/xtensa-toolchain/release/xtensa-toolchain/xtensa-lx106-elf
 export PATH="$TOOLCHAIN/bin:$PATH"
 export PS1="($ENV_TITLE) $PS1"
 
-
-function esp.sc() {
-	screen "/dev/ttyUSB$1" 115200
-}
-
 if [ ! -d "$HERE/bin" ]; then
 	echo "$HERE/bin directory not exists, trying to create it"
 	mkdir "$HERE/bin"
@@ -59,7 +54,6 @@ function deactivate {
   unset BACKUP_BINDIR	
   unset BACKUP_ENV_TITLE
   unset -f deactivate
-  unset -f esp.sc
   unset -f esp8266-newproject
 }
 
