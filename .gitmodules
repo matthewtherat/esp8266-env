@@ -1,12 +1,12 @@
 [submodule "xtensa-toolchain"]
 	path = xtensa-toolchain
-	url = git@github.com:pylover/xtensa-toolchain.git
+	url = https://github.com/matthewtherat/xtensa-toolchain.git
 	update = rebase
 [submodule "sdk"]
 	path = sdk
-	url = git@github.com:pylover/ESP8266_NONOS_SDK.git
+	url = https://github.com/matthewtherat/ESP8266_NONOS_SDK.git
 	update = rebase
 [submodule "fota"]
 	path = fota
-	url = git@github.com:pylover/esp8266-fota.git
+	url = https://github.com/matthewtherat/esp8266-fota.git
 	update = rebase
